@@ -1690,33 +1690,57 @@ class RawEditorState extends EditorState
     final Widget child;
 
     if (widget.scrollable) {
-      child = Scrollable(
-        key: _scrollableKey,
-        excludeFromSemantics: true,
-        controller: _scrollController,
-        axisDirection: AxisDirection.down,
-        scrollBehavior: ScrollConfiguration.of(context).copyWith(
-          scrollbars: true,
-          overscroll: false,
-        ),
-        physics: widget.scrollPhysics,
-        viewportBuilder: (context, offset) => CompositedTransformTarget(
-          link: _toolbarLayerLink,
-          child: _Editor(
+      // child = Scrollable(
+      //   key: _scrollableKey,
+      //   excludeFromSemantics: true,
+      //   controller: _scrollController,
+      //   axisDirection: AxisDirection.down,
+      //   scrollBehavior: ScrollConfiguration.of(context).copyWith(
+      //     scrollbars: true,
+      //     overscroll: false,
+      //   ),
+      //   physics: widget.scrollPhysics,
+      //   viewportBuilder: (context, offset) => CompositedTransformTarget(
+      //     link: _toolbarLayerLink,
+      //     child: _Editor(
+      //       key: _editorKey,
+      //       offset: offset,
+      //       document: widget.controller.document,
+      //       selection: widget.controller.selection,
+      //       hasFocus: _hasFocus,
+      //       textDirection: _textDirection,
+      //       startHandleLayerLink: _startHandleLayerLink,
+      //       endHandleLayerLink: _endHandleLayerLink,
+      //       onSelectionChanged: _handleSelectionChanged,
+      //       padding: widget.padding,
+      //       maxContentWidth: widget.maxContentWidth,
+      //       cursorController: _cursorController,
+      //       children: _buildChildren(context),
+      //     ),
+      //   ),
+      // );
+       child = CompositedTransformTarget(
+        link: _toolbarLayerLink,
+        child: Semantics(
+          child: SingleChildScrollView(
+            controller: scrollController,
+            key: _scrollableKey,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: _Editor(
             key: _editorKey,
-            offset: offset,
+            offset: ViewportOffset.zero(),
             document: widget.controller.document,
             selection: widget.controller.selection,
             hasFocus: _hasFocus,
+            cursorController: _cursorController,
             textDirection: _textDirection,
             startHandleLayerLink: _startHandleLayerLink,
             endHandleLayerLink: _endHandleLayerLink,
             onSelectionChanged: _handleSelectionChanged,
             padding: widget.padding,
             maxContentWidth: widget.maxContentWidth,
-            cursorController: _cursorController,
             children: _buildChildren(context),
-          ),
+          ),),
         ),
       );
     } else {
